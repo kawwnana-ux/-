@@ -2,6 +2,7 @@ import io
 import re
 import json
 import zipfile
+import spacy
 from datetime import datetime
 
 import pandas as pd
