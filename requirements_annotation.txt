@@ -9,3 +9,7 @@ pandas
 spacy
 ginza
 ja-ginza
+streamlit
+pandas
+spacy>=3.0.0
+https://github.com/megagonlabs/ginza/releases/download/latest/ja_ginza-5.1.3-py3-none-any.whl
