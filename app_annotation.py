@@ -1,17 +1,12 @@
 import io
-import re
 import json
+import re
 import zipfile
 from datetime import datetime
 
 import pandas as pd
+import spacy
 import streamlit as st
-
-try:
-    import spacy
-except ImportError:
-    spacy = None
-
 
 st.set_page_config(
     page_title="特許SAO 教師データ作成",
@@ -62,8 +57,6 @@ GENERIC_NON_COMPONENTS = {
 
 @st.cache_resource
 def load_ginza():
-    if spacy is None:
-        raise RuntimeError("spaCy がインストールされていません。")
     for model_name in ("ja_ginza", "ja_ginza_electra"):
         try:
             return spacy.load(model_name)
@@ -107,18 +100,17 @@ def get_component_spans(token_df):
 
     for _, row in token_df.iterrows():
         label = row["label"]
+        row_dict = row.to_dict()
 
         if label == "B-COMP":
             if current:
                 spans.append(current)
-            current = [row]
+            current = [row_dict]
         elif label == "I-COMP":
             if current:
-                current.append(row)
+                current.append(row_dict)
             else:
-                # Iから始まった場合は、教師データ作成画面で扱いやすいよう
-                # 暫定的にBとして開始
-                current = [row]
+                current = [row_dict]
         else:
             if current:
                 spans.append(current)
@@ -352,7 +344,7 @@ if st.session_state.token_df is not None:
     edited = st.data_editor(
         token_df,
         hide_index=True,
-        width="stretch",
+        use_container_width=True,
         num_rows="fixed",
         column_config={
             "token_id": st.column_config.NumberColumn(
@@ -407,7 +399,7 @@ if st.session_state.token_df is not None:
         st.dataframe(
             display_components[["表示", "start_token", "end_token"]],
             hide_index=True,
-            width="stretch",
+            use_container_width=True,
         )
 
         # ====================================================
@@ -525,7 +517,7 @@ if st.session_state.token_df is not None:
                     ]
                 ],
                 hide_index=True,
-                width="stretch",
+                use_container_width=True,
             )
 
             delete_no = st.number_input(
