@@ -4,3 +4,8 @@ ginza
 ja-ginza
 pandas
 numpy
+streamlit
+pandas
+spacy
+ginza
+ja-ginza
