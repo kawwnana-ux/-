@@ -1,0 +1,6 @@
+streamlit
+spacy
+ginza
+ja-ginza
+pandas
+numpy
